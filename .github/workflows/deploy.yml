@@ -13,6 +13,13 @@ jobs:
       # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: main  # Ensure the correct branch is checked out
+          fetch-depth: 0  # Fetch full history
+      
+      - name: Check commit count
+        run: |
+          git rev-list --count HEAD
 
       # Step 2: Log in to DockerHub (requires DockerHub credentials stored in GitHub Secrets)
       - name: Log in to DockerHub
