@@ -1,0 +1,46 @@
+# Python specific ignores
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Django specific ignores
+*.log
+*.pot
+*.pyc
+*.sqlite3
+db.sqlite3
+media/
+static/
+staticfiles/
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+.env
+# IDE-specific ignores
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# MacOS specific ignores
+.DS_Store
+
+# Windows specific ignores
+Thumbs.db
+ehthumbs.db
+
+# Node.js (if applicable for frontend)
+node_modules/
+npm-debug.log
+yarn-debug.log
+flowcharts/
+notes.txt

@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    networks:
+      - demo_network
+
+  demo_api_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: demo_api_service
+    ports:
+      - "${DJANGO_PORT}:8000"
+    command: >
+      bash -c "./wait-for-it.sh db:5432 -- bash /run_server.sh"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - demo_network
+
+volumes:
+  postgres_data:
+
+networks:
+  demo_network:

@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "demo-apis"
+version = "0.1.0"
+description = ""
+authors = ["arif <mohidulhoque216@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "5.1.0"
+djangorestframework = "^3.15.2"
+pillow = "^10.4.0"
+psycopg2-binary = "^2.9.9"
+asgiref = "^3.8.1"
+django-environ = "^0.11.2"
+gunicorn = "^23.0.0"
+uvicorn = "^0.30.6"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
