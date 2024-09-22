@@ -32,7 +32,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
           script: |
             echo "Pulling updated image from DockerHub..."
             docker pull ${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)
