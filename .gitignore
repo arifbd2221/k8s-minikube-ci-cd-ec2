@@ -44,3 +44,4 @@ npm-debug.log
 yarn-debug.log
 flowcharts/
 notes.txt
+*.pem

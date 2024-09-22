@@ -24,3 +24,19 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           IMAGE_NAME: demo-apis  # Optional: hardcode the image name or store it as a secret
+          
+      # Step 4: SSH into EC2 and deploy the updated image
+      - name: Deploy to Minikube on EC2
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling updated image from DockerHub..."
+            docker pull ${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)
+
+            echo "Updating Kubernetes deployment with new image..."
+            kubectl set image deployment/demo-api-service-deployment demo-apis=${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)
+
+            echo "Deployment updated with latest image!"
