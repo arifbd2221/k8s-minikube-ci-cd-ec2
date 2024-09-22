@@ -38,9 +38,9 @@ jobs:
       - name: Deploy to Minikube on EC2
         run: |
           echo "Pulling updated image from DockerHub..."
-          docker pull ${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "docker pull ${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)"
 
           echo "Updating Kubernetes deployment with new image..."
-          kubectl set image deployment/demo-api-service-deployment demo-apis=${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "kubectl set image deployment/demo-api-service-deployment demo-apis=${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)"
 
           echo "Deployment updated with latest image!"
