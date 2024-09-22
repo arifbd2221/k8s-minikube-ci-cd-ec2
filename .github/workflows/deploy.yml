@@ -24,26 +24,26 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           IMAGE_NAME: demo-apis  # Optional: hardcode the image name or store it as a secret
-
-      - name: Create SSH Key File
-        run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > /tmp/ssh_key.pem
-          chmod 400 /tmp/ssh_key.pem  # Ensure correct permissions
       
-      # Step 4: SSH into EC2 and deploy the updated image
-      - name: Deploy to Minikube on EC2
-        uses: appleboy/ssh-action@v0.1.1
+      # Step 4: SSH into EC2
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key_path: /tmp/ssh_key.pem  # Use the created key file path
-          script: |
-            echo "Pulling updated image from DockerHub..."
-            docker pull ${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-            echo "Updating Kubernetes deployment with new image..."
-            kubectl set image deployment/demo-api-service-deployment demo-apis=${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)
+      - name: Add EC2 to known hosts
+        run: echo "${{ secrets.KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
 
-            echo "Deployment updated with latest image!"
+      # deploy the updated image
+      - name: Deploy to Minikube on EC2
+        run: |
+          echo "Pulling updated image from DockerHub..."
+          docker pull ${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)
+
+          echo "Updating Kubernetes deployment with new image..."
+          kubectl set image deployment/demo-api-service-deployment demo-apis=${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)
+
+          echo "Deployment updated with latest image!"
+            
           
-          debug: true
+        debug: true
