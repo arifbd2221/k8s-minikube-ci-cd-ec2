@@ -44,6 +44,3 @@ jobs:
           kubectl set image deployment/demo-api-service-deployment demo-apis=${{ secrets.DOCKER_USERNAME }}/demo-apis:$(git rev-list --count HEAD)
 
           echo "Deployment updated with latest image!"
-            
-          
-        debug: true
