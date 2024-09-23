@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
 from django.views.static import serve
+from todo.views import HealthCheckView
 
 
 def my_static(prefix, view=serve, **kwargs):
@@ -43,6 +44,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('social_site.urls')),
     path('api/v1/', include('todo.urls')),
+    path('health/', HealthCheckView.as_view(), name='health-check'),
 ]
 
 urlpatterns += my_static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

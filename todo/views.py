@@ -1,8 +1,10 @@
 # todo/views.py
-
+from rest_framework.views import APIView
 from rest_framework import generics, permissions
 from .models import Task, Category
 from .serializers import TaskSerializer, CategorySerializer
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class CategoryListCreateView(generics.ListCreateAPIView):
@@ -38,3 +40,9 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Task.objects.filter(owner=self.request.user)
+
+
+class HealthCheckVIew(APIView):
+    def get(self, request, *args, **kwargs):
+        # You can add more checks here (e.g., database, cache, etc.)
+        return Response({"status": "ok"}, status=status.HTTP_200_OK)

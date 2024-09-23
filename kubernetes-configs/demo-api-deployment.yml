@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-api-service-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo-apis
+  template:
+    metadata:
+      labels:
+        app: demo-apis
+    spec:
+      containers:
+      - name: demo-apis
+        image: arifbd2221/demo-apis:latest # # Image is pulled from DockerHub
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            path: /health/   # Path you want to check (could be the home page or a custom health check)
+            port: 8000  # The port Django is running on
+          initialDelaySeconds: 10  # Delay before the probe starts
+          periodSeconds: 5  # How often to perform the probe
+          timeoutSeconds: 2  # Timeout for the probe
+          failureThreshold: 3  # Number of failures before marking the container as not ready
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_DB
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
+        - name: POSTGRES_HOST
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_HOST
+        - name: DATABASE_PORT
+          value: "5432"
+        - name: TRUSTED_HOSTS
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: TRUSTED_HOSTS
+        - name: DJANGO_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: DJANGO_PORT
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: SECRET_KEY
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: django-config
+              key: APP_ENV

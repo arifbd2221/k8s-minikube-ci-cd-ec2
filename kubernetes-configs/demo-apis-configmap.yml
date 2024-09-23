@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: django-config
+data:
+  TRUSTED_HOSTS: "*"
+  DJANGO_PORT: "8000"
+  APP_ENV: "production"
